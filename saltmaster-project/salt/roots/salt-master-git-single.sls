@@ -45,6 +45,22 @@ salt-repo-{{ project }}-{{ branch }}:
     - require_in:
       - file: /etc/salt/master.d/roots.conf
 
+create-tmpl:
+  file.copy:
+    - name: {{ salt_projects_root }}/{{ project_target }}/{{ branch }}/salt/roots/top.sls.tmpl
+    - source: {{ salt_projects_root }}/{{ project_target }}/{{ branch }}/salt/roots/top.sls
+    - force: True
+    - require:
+      - git: salt-repo-{{ project }}-{{ branch }}
+
+update-top-file:
+  file.managed:
+    - name: {{ salt_projects_root }}/{{ project_target }}/{{ branch }}/salt/roots/top.sls
+    - source: {{ salt_projects_root }}/{{ project_target }}/{{ branch }}/salt/roots/top.sls.tmpl
+    - template: jinja
+    - require:
+      - git: salt-repo-{{ project }}-{{ branch }}
+
 # manage the file_roots config to generate environments
 /etc/salt/master.d/roots.conf:
   file.managed:
