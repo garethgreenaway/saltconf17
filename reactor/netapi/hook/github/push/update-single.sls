@@ -24,7 +24,7 @@ def run():
           else:
               log.error('Returning nothing')
               return {}
-          kwargs = {'saltenv': 'saltmaster', 'pillar': {'project': project, 'branch': branch}}
+          kwargs = {'saltenv': 'saltmaster', 'pillar': {'project': project, 'branch': branch, 'salt_branch': branch}}
           return {
               'github_webhook_update': {
                   'local.state.sls': [ {'tgt': 'salt.wiked.org'}, {'arg': ['salt-master-git-single']}, {'kwarg': kwargs}, ]
