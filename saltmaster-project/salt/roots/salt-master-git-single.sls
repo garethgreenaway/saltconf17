@@ -37,6 +37,7 @@ salt-repo-{{ project }}-{{ branch }}:
     - force_clone: True
     - force_fetch: True
     - force_reset: True
+    - identity: /tools/deployment
     - require:
       - file: {{ salt_projects_root }}
 {%- if salt['file.directory_exists'](salt_projects_root + '/' + project_target + '/' + branch) %}

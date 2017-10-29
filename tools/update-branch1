@@ -1,1 +1,1 @@
-curl-event.sh branch1 b213856282da7623b8cf6afd3583eebaf56ef5e2
+./curl-event.sh branch1 b213856282da7623b8cf6afd3583eebaf56ef5e2
