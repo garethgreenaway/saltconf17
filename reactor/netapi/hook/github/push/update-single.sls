@@ -17,10 +17,8 @@ def run():
       computed_signature = hmac.new(key, body,hashlib.sha1).hexdigest()
       if computed_signature == signature:
           project = data['post']['repository']['name'].lower()
-          log.error('post {0}'.format(data['post']))
           if 'ref' in data['post']:
               branch = data['post']['ref'].split('/')[2]
-              log.error('branch {0}'.format(branch))
           else:
               log.error('Returning nothing')
               return {}
@@ -32,7 +30,6 @@ def run():
           }
       else:
         log.error('Signatures do not match')
-        log.error('s: {} cs: {}'.format(signature, computed_signature))
     else:
         log.error('Returning nothing')
         return {}
