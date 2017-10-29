@@ -15,4 +15,4 @@ saltconf17_demo:
       - /home/gareth/code/saltconf17/saltmaster-project:/devops/projects/saltmaster
       - /home/gareth/code/saltconf17/pillar:/srv/pillar
       - /home/gareth/code/saltconf17/tools:/tools
-    - command: /usr/bin/tmux
+    - command: /tools/tmux-start.sh
