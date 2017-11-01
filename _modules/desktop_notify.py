@@ -9,6 +9,8 @@ import logging
 import os
 import pwd
 
+import salt.utils
+
 from salt.exceptions import CommandExecutionError
 
 log = logging.getLogger(__name__)
@@ -18,10 +20,13 @@ __virtualname__ = 'desktop_notify'
 
 
 def __virtual__():
-    return __virtualname__
+    if salt.utils.which('notify-send'):
+        return __virtual__
+    return (False, 'The desktop_notify execution module cannot be loaded: '
+                   'the notify-send binary is not in the path.')
 
 
-def send(user, summary, message, icon=None):
+def send(user, summary, message, **kwargs):
     '''
     Send a message via notify-send to user
 
@@ -48,8 +53,19 @@ def send(user, summary, message, icon=None):
         environ['XDG_RUNTIME_DIR'] = xdg_runtime_dir
 
         cmd = 'notify-send'
-        if icon:
-            cmd = '{0} -i {1}'.format(cmd, icon)
+        if 'urgency' in kwargs:
+            if kwargs['urgency'] not in ('low', 'normal', 'critical'):
+                ret = {'comment': 'Valid urgency levels: low, normal, and critical', 'result': False}
+                return ret
+            cmd = '{0} -u {1}'.format(cmd, kwargs['urgency'])
+        if 'expire_time' in kwargs:
+            cmd = '{0} -t {1}'.format(cmd, kwargs['expire_time'])
+        if 'app_name' in kwargs:
+            cmd = '{0} -a {1}'.format(cmd, kwargs['app_name'])
+        if 'icon' in kwargs:
+            cmd = '{0} -i {1}'.format(cmd, kwargs['icon'])
+        if 'category' in kwargs:
+            cmd = '{0} -c {1}'.format(cmd, kwargs['category'])
         cmd = '{0} "{1}" "{2}"'.format(cmd, summary, message)
         result = __salt__['cmd.run_all'](cmd,
                                          runas=user,
