@@ -21,7 +21,7 @@ __virtualname__ = 'desktop_notify'
 
 def __virtual__():
     if salt.utils.which('notify-send'):
-        return __virtual__
+        return __virtualname__
     return (False, 'The desktop_notify execution module cannot be loaded: '
                    'the notify-send binary is not in the path.')
 
