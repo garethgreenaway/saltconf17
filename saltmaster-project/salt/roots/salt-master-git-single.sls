@@ -76,3 +76,10 @@ update-top-file:
 
 {% endif %}
 {% endif %}
+
+restart-saltmaster:
+  service.restart:
+    - name: salt-master
+    - watch:
+      - file: /etc/salt/master.d/roots.conf
+
